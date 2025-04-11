@@ -129,8 +129,57 @@ function update() {
     if (bullet.y < 0) player.bullets.splice(index, 1);
   });
 
-   // Enemies 
+  
+   // Enemies
+  enemies.forEach((enemy, eIndex) => {
+    enemy.y += enemy.speed;
+    // Remove if off-screen
+    if (enemy.y > canvas.height) {
+      enemies.splice(eIndex, 1);
+      return;
+    }
+    // Enemy shooting
+    if (Date.now() - enemy.lastShot > 2000) {
+      enemy.lastShot = Date.now();
+      enemyBullets.push({
+        x: enemy.x + enemy.width / 2 - 5,
+        y: enemy.y + enemy.height,
+        width: 10,
+        height: 10,
+        speed: 4,
+      });
+    }
+    // Collision with player
+    if (isColliding(player, enemy)) {
+      if (!player.shieldActive) player.health -= 10;
+      enemies.splice(eIndex, 1);
+      return;
+    }
+    // Collision with bullets
+    player.bullets.forEach((bullet, bIndex) => {
+      if (isColliding(bullet, enemy)) {
+        enemy.health -= 20;
+        player.bullets.splice(bIndex, 1);
+        if (enemy.health <= 0) {
+          player.score += 10;
+          enemies.splice(eIndex, 1);
+        }
+      }
+    });
+  });
 
+  // Enemy bullets
+  enemyBullets.forEach((bullet, index) => {
+    bullet.y += bullet.speed;
+    if (bullet.y > canvas.height) {
+      enemyBullets.splice(index, 1);
+      return;
+    }
+    if (isColliding(bullet, player)) {
+      if (!player.shieldActive) player.health -= 10;
+      enemyBullets.splice(index, 1);
+    }
+  });
 
 
 
