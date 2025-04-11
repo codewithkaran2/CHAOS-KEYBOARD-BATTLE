@@ -129,54 +129,9 @@ function update() {
     if (bullet.y < 0) player.bullets.splice(index, 1);
   });
 
-   // Enemies & collisions
-  enemies.forEach((en, ei) => {
-    en.y += en.speed;
-    if (Date.now() - en.lastShot > 2000) {
-      en.lastShot = Date.now();
-      const dirX = (player.x - en.x);
-      const dirY = (player.y - en.y);
-      const mag = Math.hypot(dirX, dirY);
-      enemyBullets.push({
-        x: en.x + en.width/2,
-        y: en.y + en.height/2,
-        width: 10,
-        height: 10,
-        vx: dirX/mag*4,
-        vy: dirY/mag*4
-      });
-    }
-    if (isColliding(player, en)) {
-      if (!player.shieldActive) player.health -= 10;
-      enemies.splice(ei,1);
-      return;
-    }
-    player.bullets.forEach((b, bi) => {
-      if (isColliding(b, en)) {
-        en.health -= 20;
-        player.bullets.splice(bi,1);
-        if (en.health <= 0) {
-          player.score += 10;
-          enemyDeathSound.currentTime = 0;
-          enemyDeathSound.play();
-          enemies.splice(ei,1);
-        }
-      }
-    });
-  });
+   // Enemies 
 
-  // Enemy bullets
-  enemyBullets.forEach((b,i) => {
-    b.x += b.vx; b.y += b.vy;
-    if (b.x < 0 || b.x > canvas.width || b.y < 0 || b.y > canvas.height) {
-      enemyBullets.splice(i,1);
-      return;
-    }
-    if (isColliding(b, player)) {
-      if (!player.shieldActive) player.health -= 10;
-      enemyBullets.splice(i,1);
-    }
-  });
+
 
 
    // Power-ups & timed removal
