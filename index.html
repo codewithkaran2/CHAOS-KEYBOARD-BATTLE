@@ -193,6 +193,19 @@
       opacity: 1;
       transition: 0s;
     }
+    
+    /* glow‐border animation */
+    @keyframes glowBorder {
+    0%, 100% { box-shadow: 0 0 8px rgba(255,255,255,0.6); }
+    50%      { box-shadow: 0 0 20px rgba(255,255,255,0.9); }
+   }
+
+   /* “selected” state for any mode button */
+   .mode-button.selected {
+   animation: glowBorder 1.5s ease-in-out infinite;
+   transform: translateY(-2px);
+   }
+ 
     /* Duo Mode button remains blue */
     .duo-button { 
       background: linear-gradient(45deg, #007bff, #0056b3);
